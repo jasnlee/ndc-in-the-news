@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+.search-articles {
+	float: right;
+	margin-bottom: 10px;
+}
+.table-ndc-in-the-news {
+    border: 0px;
+    border-collapse:collapse;
+    width: 100%;
+}
+.table-ndc-in-the-news > thead > tr {
+    background:#ccc;
+}
+.table-ndc-in-the-news > thead > tr > th {
+    background: #ccc;
+    padding: 10px;
+    text-align: left;
+    font-weight: 900;
+}
+.table-ndc-in-the-news > tbody > tr > td {
+    padding: 12px;
+    text-align: left;
+}
+</style>
+</head>
+    
+<script>
+angular.module('myApp', ['ngMessages', 'ngAnimate']).controller("myCtrl", function($scope) {
+    $scope.options =['source', 'title', 'date']; // Sorting options
+    $scope.articles = [
+
+      {
+        link: "http://markets.businessinsider.com/news/stocks/kevin-parikh-honored-at-aif-s-annual-bowties-and-bangles-gala-event-1019612456",
+        source: "Business Insider",
+        title: "Kevin Parikh Honored at AIF's Annual Bowties and Bangles Gala Event",
+        "date": new Date(2018, 2, 28)
+      },
+      {
+        link: "https://www.businesswire.com/news/home/20180319005831/en/Dynegy-Named-Top-25-Companies-Diversity-Texas",
+        source: "BusinessWire",
+        title: "Dynegy Named One of Top 25 Companies for Diversity in Texas",
+        "date": new Date(2018, 2, 19)
+      },
+
+    ];
+
+    $scope.sortType = 'date';
+    $scope.sortReverse = false;
+    $scope.searchArticles = '';
+
+  });
+</script>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+	<form class="search-articles">
+		<i class="fa fa-search"></i> <input type="text" placeholder="Search the articles" ng-model="searchArticle">
+    </form>
+	<div style="clear:both;"></div>
+    
+    <table class="table-ndc-in-the-news">
+        <thead>
+            <tr>
+                <th>
+                    <a href="#" ng-click="sortType = 'source'; sortReverse = !sortReverse">Source</a>
+                    <span ng-show="sortType == 'source' && !sortReverse"><i class="fa fa-angle-down"></i></span>
+                    <span ng-show="sortType == 'source' && sortReverse"><i class="fa fa-angle-up"></i></span>
+                </th>
+                <th>
+                    <a href="#" ng-click="sortType = 'title'; sortReverse = !sortReverse">Article</a>
+                    <span ng-show="sortType == 'title' && !sortReverse"><i class="fa fa-angle-down"></i></span>
+                    <span ng-show="sortType == 'title' && sortReverse"><i class="fa fa-angle-up"></i></span>
+                </th>
+                <th>
+                    <a href="#" ng-click="sortType = 'date'; sortReverse = !sortReverse">Date</a>
+                    <span ng-show="sortType == 'date' && !sortReverse"><i class="fa fa-angle-down"></i></span>
+                    <span ng-show="sortType == 'date' && sortReverse"><i class="fa fa-angle-up"></i></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat = "article in articles | orderBy:sortType:sortReverse | filter:searchArticles">
+                <td>{{article.source}}</td>
+                <td><a href="{{article.link}}" target="_blank" rel="noopener noreferrer">{{article.title}}</a></td>
+                <td>{{article.date | date:'longDate'}}</td>
+            </tr>
+        </tbody><!-- End table body -->
+    </table> <!-- End table -->
+    
+</div> <!-- End myApp -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-messages.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    
+</html>
