@@ -8,6 +8,16 @@
 	float: right;
 	margin-bottom: 10px;
 }
+input {
+	width: 175px;
+}
+.search-clear {
+    cursor: pointer;
+    left: -22px;
+    position: relative;
+	text-decoration:none;
+    top: 0px;
+}
 .table-ndc-in-the-news {
     border: 0px;
     border-collapse:collapse;
@@ -22,6 +32,13 @@
     text-align: left;
     font-weight: 900;
 }
+.table-ndc-in-the-news > tbody > tr:hover {
+	background: #3f92a8 !important;
+	color: #fff;
+}
+.table-ndc-in-the-news > tbody > tr:hover a {
+	color: #fff;
+}
 .table-ndc-in-the-news > tbody > tr:nth-child(odd) {
     background: #f2f2f2;
 }
@@ -31,6 +48,9 @@
 .table-ndc-in-the-news > tbody > tr > td {
     padding: 12px;
     text-align: left;
+}
+.date-table-td {
+	width: 110px;
 }
 </style>
 </head>
@@ -59,12 +79,21 @@ angular.module('myApp', ['ngMessages', 'ngAnimate']).controller("myCtrl", functi
     $scope.sortReverse = false;
     $scope.searchArticles = '';
 
-  });
+})
+
+// remove unsafe link
+.config( [
+    '$compileProvider',
+    function( $compileProvider )
+    {   
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript|chrome-extension):/);
+    }
+]);
 </script>
 
 <div ng-app="myApp" ng-controller="myCtrl">
 	<form class="search-articles">
-		<i class="fa fa-search"></i> <input type="text" placeholder="Search the articles" ng-model="searchArticle">
+		<i class="fa fa-search"></i> <input type="text" placeholder="Search the articles" ng-model="searchArticle"> <a class="search-clear" ng-click="searchArticle = '' ">X</a>
     </form>
 	<div style="clear:both;"></div>
     
@@ -92,7 +121,7 @@ angular.module('myApp', ['ngMessages', 'ngAnimate']).controller("myCtrl", functi
             <tr ng-repeat = "article in articles | orderBy:sortType:sortReverse | filter:searchArticles">
                 <td>{{article.source}}</td>
                 <td><a href="{{article.link}}" target="_blank" rel="noopener noreferrer">{{article.title}}</a></td>
-                <td>{{article.date | date:'longDate'}}</td>
+                <td class="date-table-td">{{article.date | date:'longDate'}}</td>
             </tr>
         </tbody><!-- End table body -->
     </table> <!-- End table -->
